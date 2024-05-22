@@ -1,0 +1,62 @@
+{% extends "neutrovisinternal/layout.html" %}
+
+{% block title %}Neutrovis Intranet{% endblock %}
+
+{% block body %}
+<div class="maindiv">
+    <div class="d-flex align-items-center justify-content-end">
+        <h3>My Claims</h3>
+        <div class="p-2 flex-grow-1"></div>
+        <a href="{% url 'newsubmission' %}" class="btn btn-sm btn-success ml-2">New Claim</a>
+    </div>
+    {% if claims %}
+    <table id="claim_record" class="table table-sm table-bordered table-striped table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th>No.</th>
+            <th>Claim Record</th>
+            <th>Claim Amount</th>
+            <th>Submitted Date</th>
+            <th>Approval Date</th>
+            <th>Advanced Claim</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for claim in claims %}
+        <tr>
+            <td class="counterCell"></td>
+            <td><a href="viewsubmission/{{ claim.id }}">{{ claim.name }}</a></td>
+            <td>MYR {{ claim.total_amount }}</td>
+            <td>{{ claim.submit_date }}</td>
+            <td>{{ claim.approval_date }}</td>
+            <td>
+                {% if claim.is_adv_payment %}
+                Yes
+                {% else %}
+                No
+                {% endif %}
+            </td>
+            <td>{{ claim.status }}</td>
+            <td>
+                {% if claim.status == "Draft" %}
+                <form action="/delete_claim" method="post">
+                    {% csrf_token %}
+                    <input type="text" name="claim_id" value="{{ claim.id }}" hidden>
+                    <button class="btn btn-block btn-sm btn-danger" type="submit"
+                    onclick="return confirm('Are you sure you want to delete this claim?');">
+                        Delete
+                    </button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <h4>You can start by creating a new claim <a href="{% url 'newsubmission' %}">here</a></h4>
+    {% endif %}
+</div>
+{% endblock %}

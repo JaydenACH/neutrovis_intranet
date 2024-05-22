@@ -1,0 +1,496 @@
+{% extends "neutrovisinternal/layout.html" %}
+{% load group_tags %}
+
+{% block title %}View submission{% endblock %}
+
+{% block body %}
+<div class="maindiv">
+    <div class="progress mb-1">
+        {% if claim.status == "Draft" %}
+        <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+            Draft
+        </div>
+        {% elif claim.status == "Submitted" %}
+        <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+            Draft
+        </div>
+        <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+            Submitted
+        </div>
+        {% elif claim.status == "Approved" %}
+        <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+            Draft
+        </div>
+        <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+            Submitted
+        </div>
+        <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+            Approved
+        </div>
+        {% elif claim.status == "Verified" %}
+        <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+            Draft
+        </div>
+        <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+            Submitted
+        </div>
+        <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+            Approved
+        </div>
+        <div class="progress-bar bg-warning" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+            Verified
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="d-flex align-items-center justify-content-end">
+        <div class="p-2 flex-grow-1"></div>
+        <button class="btn btn-primary btn-sm mr-1 mb-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#claimlog"
+                aria-controls="offcanvasScrolling">
+            Show log
+        </button>
+        {% if request.user == claim.requestor.profile.reporting_user and claim.status == "Submitted" %}
+        <form id="approve_claim" action="/approve_claim" method="post">
+            {% csrf_token %}
+            <input type="text" name="claim_id" value="{{ claim.id }}" hidden>
+            <button class="btn btn-block btn-sm btn-success mr-1 mb-1" type="submit">Approve</button>
+        </form>
+        <form class="reject-claim-form" id="reject_claim" action="/reject_claim" method="post">
+            {% csrf_token %}
+            <input type="text" name="claim_id" value="{{ claim.id }}" hidden>
+            <button class="btn btn-sm btn-danger ml-1 mb-1" type="submit">Reject</button>
+        </form>
+        {% endif %}
+        {% if claim.status == "Draft" %}
+        <form id="submit_approval" action="/submitapproval" method="post">
+            {% csrf_token %}
+            <input name="claim_id" value="{{ claim.id }}" hidden>
+            <button class="btn btn-sm btn-success ml-2 mb-1" type="submit">Submit For Approval</button>
+        </form>
+        {% endif %}
+        {% if claim.status == "Approved" %}
+        <form id="verify_claim" action="/verify_claim" method="post">
+            {% csrf_token %}
+            <input type="text" name="claim_id" value="{{ claim.id }}" hidden>
+            <button class="btn btn-block btn-sm btn-success mr-1 mb-1" type="submit">Verify</button>
+        </form>
+        <form class="reject-claim-form" id="reject_aclaim" action="/reject_aclaim" method="post">
+            {% csrf_token %}
+            <input type="text" name="claim_id" value="{{ claim.id }}" hidden>
+            <button class="btn btn-block btn-sm btn-danger ml-1 mb-1" type="submit">Reject</button>
+        </form>
+        {% endif %}
+    </div>
+
+    <div class="row align-self-start">
+        <div class="col">
+            <table id="claimform-left" class="table table-sm">
+                <thead class="thead-dark">
+                <tr>
+                    <th colspan="1">Staff Claim</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        Record: {{ claim.name }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Requestor: {{ claim.requestor.value }} {{ claim.requestor }}
+                    </td>
+                </tr>
+                <tr>
+                    <td id="claim_total_amount">
+                        Total: {{ request.user.profile.default_currency.symbol }} {{ claim.total_amount }}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col">
+            <form action="/save_claim_advance_info" method="post">
+                {% csrf_token %}
+                <table id="claimform-right" class="table table-sm">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>Advance Payment</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            Is this an advance payment?
+                            {% if claim_form.is_adv_payment.value %}
+                                {% if claim.status != "Draft" %}
+                                    <input type="checkbox" name="is_adv_payment" checked disabled>
+                                {% else %}
+                                    <input type="checkbox" name="is_adv_payment" checked>
+                                {% endif %}
+                            {% else %}
+                                {% if claim.status != "Draft" %}
+                                    <input type="checkbox" name="is_adv_payment" disabled>
+                                {% else %}
+                                    <input type="checkbox" name="is_adv_payment">
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Do you have an advance payment for this claim?
+                            {% if claim_form.has_adv_payment.value %}
+                                {% if claim.status != "Draft" %}
+                                    <input type="checkbox" name="has_adv_payment" id="has_adv_payment" checked disabled>
+                                {% else %}
+                                    <input type="checkbox" name="has_adv_payment" id="has_adv_payment" checked>
+                                {% endif %}
+                            {% else %}
+                                {% if claim.status != "Draft" %}
+                                    <input type="checkbox" name="has_adv_payment" id="has_adv_payment" disabled>
+                                {% else %}
+                                    <input type="checkbox" name="has_adv_payment" id="has_adv_payment">
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr id="adv_claim_selection">
+                        <td>
+                            Advance Payment ID:
+                            {% if claim.has_adv_payment %}
+                                {% if claim.status != "Draft" %}
+                                {{ claim.adv_claim.name }}
+                                {% else %}
+                                <select name="adv_claim_select" id="adv_claim_select">
+                                    {% for adv_claim in adv_claims %}
+                                    {% if adv_claim == claim.adv_claim %}
+                                    <option value="{{ adv_claim.id }}" selected>{{ adv_claim.name }}</option>
+                                    {% else %}
+                                    <option value="{{ adv_claim.id }}">{{ adv_claim.name }}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                </select>
+                                {% endif %}
+                            {% else %}
+                                <select name="adv_claim_select" id="adv_claim_select">
+                                    {% for adv_claim in adv_claims %}
+                                    <option value="{{ adv_claim.id }}">{{ adv_claim.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% if claim.has_adv_payment %}
+                    <tr>
+                        <td id="claim_adv_balance">
+                                Balance: {{ request.user.profile.default_currency.symbol }} {{ claim.adv_balance }}
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% if claim.status == "Draft" %}
+                    <tr>
+                        <td>
+                            <input type="text" name="claim_id" value="{{ claim.id }}" hidden>
+                            <button type="submit" class="btn btn-sm btn-info">Save</button>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+    <table id="claimline" class="table table-sm table-bordered table-striped table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th colspan="11">Claim lines</th>
+        </tr>
+        </thead>
+        <thead>
+        <tr>
+            <th>No.</th>
+            <th>Invoice ID</th>
+            <th>Invoice Date</th>
+            <th>Expense Description</th>
+            <th>Expense Type</th>
+            <th>Analytic Code</th>
+            <th>Amount</th>
+            <th>Conversion Rate</th>
+            <th>Amount in {{ request.user.profile.default_currency.symbol }}</th>
+            <th>Travel Request</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for record in records %}
+        <tr>
+            <td class="counterCell">
+                <input class="claim_line_id" name="claim_line_id" type="text" value="{{ record.id }}" hidden>
+            </td>
+            <td>
+                {% if record.remark %}
+                <button type="button" class="btn btn-sm btn-link" data-bs-toggle="modal" data-bs-target="#remark-modal-{{record.id}}">
+                    {{ record.invoice_id }}
+                </button>
+                <div class="modal fade" id="remark-modal-{{record.id}}" tabindex="-1" aria-labelledby="remark_modal-{{record.id}}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="remark-{{record.id}}_ModalLabel">Remark</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                {{ record.remark|linebreaksbr }}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <button type="button" class="btn btn-sm">
+                    {{ record.invoice_id }}
+                </button>
+                {% endif %}
+            </td>
+            <td>{{ record.invoice_date }}</td>
+            <td>{{ record.invoice_description }}</td>
+            <td>
+                {% if request.user|has_group:"Finance" and claim.status == "Approved" %}
+                <select name="{{ claim_form.expense_type.name }}" id="expense-type-select" class="custom-select"
+                        style="width: 200px;" required>
+                    {% for value, label in claim_form.expense_type.field.choices %}
+                    {% if value == record.expense_type.id %}
+                    <option value="{{ value }}" selected>{{ label }}</option>
+                    {% else %}
+                    <option value="{{ value }}">{{ label }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+                {% else %}
+                {{ record.expense_type }}
+                {% endif %}
+            </td>
+            <td>
+                {% if request.user|has_group:"Finance" and claim.status == "Approved" %}
+                <select name="{{ claim_form.analytic_code.name }}" id="analytic-code-select" class="custom-select"
+                        style="width: 200px;" required>
+                    {% for value, label in claim_form.analytic_code.field.choices %}
+                    {% if value == record.analytic_code.id %}
+                    <option value="{{ value }}" selected>{{ label }}</option>
+                    {% else %}
+                    <option value="{{ value }}">{{ label }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+                {% else %}
+                {{ record.analytic_code }}
+                {% endif %}
+            </td>
+            <td>{{ record.currency.symbol }} {{ record.amount }}</td>
+            <td>
+                {% if record.use_own_rate %}
+                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="tooltip" data-bs-placement="right"
+                        data-bs-title="This is a custom rate">
+                    {{ record.own_rate }}
+                </button>
+                {% elif record.own_rate > 1 %}
+                <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="tooltip" data-bs-placement="right"
+                        data-bs-title="Rate taken on {{ record.create_date }}">
+                    {{ record.own_rate }}
+                </button>
+                {% else %}
+                    <button type="button" class="btn btn-sm btn-primary" disabled>
+                        {{ record.own_rate }}
+                    </button>
+                {% endif %}
+            </td>
+            <td>
+                {{ request.user.profile.default_currency.symbol }} {{ record.amount_myr }}
+            </td>
+            <td>
+                <a href="/view_travel_request/{{ record.travel_request.id }}/" target="_blank">
+                    {{ record.travel_request.name }}
+                </a>
+            </td>
+
+            <td>
+                <div class="d-flex align-items-left">
+                    <a href="../../media/{{ record.attachment }}" target="_blank"
+                       class="btn btn-sm btn-outline-info mr-2">
+                        View
+                    </a>
+                    {% if claim.status == "Draft" %}
+                        <form action="/deleteclaimline" method="post">
+                            {% csrf_token %}
+                            <input type="text" name="claim_line_id" value="{{ record.id }}" hidden>
+                            <button class="btn btn-sm btn-danger delete-button mr-1" type="submit"
+                            onclick="return confirm('Are you sure you want to delete this claim line?');">
+                                Delete
+                            </button>
+                        </form>
+                        {% if claim.requestor == request.user %}
+                        <form action="/edit_claim_line" method="post">
+                            {% csrf_token %}
+                            <input type="text" value="{{ record.id }}" name="claim_line_id" hidden>
+                            <input type="text" value="{{ claim.status }}" name="claim_status" hidden>
+                            <button type="submit" class="btn btn-sm btn-warning ml-1">Edit</button>
+                        </form>
+                        {% endif %}
+                    {% elif claim.status == "Approved" and request.user|has_group:"Finance" %}
+                        <button class="btn btn-sm btn-info save-btn ml-2" data-csrf-token="{{ csrf_token }}"
+                                id="save-btn-{{ record.id }}" type="button"
+                                style="display:none">
+                            Save
+                        </button>
+                    {% endif %}
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% if claim.status == "Draft" %}
+    <form id="newsubmission" action="/newsubmission" method="post">
+        {% csrf_token %}
+        <input type="text" value="{{ claim.name }}" name="claim_form_name" readonly hidden>
+        <input type="text" value="{{ claim.status }}" name="status" readonly hidden>
+        <table id="newclaimline" class="table table-sm table-bordered stripped">
+            <thead class="thead-dark">
+            <tr>
+                <th colspan="10">Add New Claim lines</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th>Invoice ID</th>
+                <td id="invoice_id">
+                    <input class="item-table" type="text" maxlength="100" name="invoice_id"
+                           value="{{ additional_data.invoice_id }}">
+                </td>
+            </tr>
+            <tr>
+                <th>Invoice Date</th>
+                <td id="invoice_date">
+                    <input type="date" id="invoice-date" name="invoice_date" value="{{ additional_data.invoice_date }}">
+                </td>
+            </tr>
+            <tr>
+                <th>Expense Description</th>
+                <td id="invoice_description">
+                    <input class="item-table" type="text" maxlength="100"
+                           name="invoice_description" value="{{ additional_data.invoice_description }}" required></td>
+            </tr>
+            <tr>
+                <th>Expense Type</th>
+                <td id="expense_type">
+                    <select name="{{ claim_form.expense_type.name }}" style="width: 300px;" required>
+                        {% for value, label in claim_form.expense_type.field.choices %}
+                        {% if value == additional_data.expense_type %}
+                        <option value="{{ value }}" selected>{{ label }}</option>
+                        {% else %}
+                        <option value="{{ value }}">{{ label }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>Analytic Code</th>
+                <td id="analytic_code">
+                    <select name="{{ claim_form.analytic_code.name }}" style="width: 300px;" required>
+                        {% for value, label in claim_form.analytic_code.field.choices %}
+                        {% if value == additional_data.analytic_code %}
+                        <option value="{{ value }}" selected>{{ label }}</option>
+                        {% else %}
+                        <option value="{{ value }}">{{ label }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>Currency</th>
+                <td id="currency">{{ claim_form.currency }}</td>
+            </tr>
+            <tr>
+                <th>Amount in Currency</th>
+                <td id="amount">
+                    <input class="item-table" type="number" step=".01" name="amount"
+                           value="{{ additional_data.amount }}" required>
+                </td>
+            </tr>
+            <tr>
+                <th>Use Custom Exchange Rate?</th>
+                <td>{{ claim_form.use_own_rate }}</td>
+            </tr>
+            <tr id="custom_exchange_rate">
+                <th>Custom Exchange Rate</th>
+                <td>
+                    {{ claim_form.own_rate }}
+                </td>
+            </tr>
+            <tr>
+                <th>Travel Request</th>
+                <td>
+                    {{ claim_form.travel_request }}
+                </td>
+            </tr>
+            <tr>
+                <th>Attachment</th>
+                <td id="attachment">
+                    <button type="button" class="btn btn-sm btn-primary js-upload-photos" id="button-upload">
+                        <span class="glyphicon glyphicon-cloud-upload"></span> Upload files
+                    </button>
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden"></span>
+                    </div>
+                    <input id="fileupload" type="file" name="file"
+                           style="display: none;"
+                           data-url="{% url 'upload_attachment' %}"
+                           data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+                </td>
+            </tr>
+            <tr>
+                <th>Remarks</th>
+                <td>
+                      <textarea class="form-control form-control-sm" id="claim_form_remarks" wrap="hard"
+                                name="claim_form_remarks" rows="5">{{additional_data.remarks}}</textarea>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-sm btn-block btn-info" id="submit_claim_line" type="submit">Add</button>
+        {% endif %}
+    </form>
+    <hr>
+    <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backgroup="false" tabindex="-1"
+    id="claimlog" aria-labelledby="offcanvasScrollingLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Logs:</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+        {% if chatters %}
+            {% for chat in chatters %}
+            <div class="row ml-2 w-auto">
+                <p>{{ chat.create_date }}: {{ chat.chat_user.profile }} {{ chat.message }} </p>
+            </div>
+            {% endfor %}
+        {% endif %}
+            <div class="container rounded-4 m-2 p-2 w-auto">
+                <form action="/send_message" method="post">
+                    {% csrf_token %}
+                    <input type="text" name="claim_id" value="{{ claim.id }}" hidden>
+                    <label for="user_chat" class="form-label">Type here:</label>
+                    <textarea class="form-control" name="chat_message" id="user_chat" cols="10" rows="3"></textarea>
+                    <button type="submit" class="btn btn-sm btn-info mt-2">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

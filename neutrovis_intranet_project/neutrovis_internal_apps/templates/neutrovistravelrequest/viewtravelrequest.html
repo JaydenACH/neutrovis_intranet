@@ -1,0 +1,261 @@
+{% extends "neutrovisinternal/layout.html" %}
+{% load group_tags %}
+{% block title %}View Travel Request{% endblock %}
+
+{% block body %}
+<div class="maindiv">
+    <div class="progress mb-1">
+        {% if travel_request.status == "Draft" %}
+        <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+            Draft
+        </div>
+        {% elif travel_request.status == "Submitted" %}
+        <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+            Draft
+        </div>
+        <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+            Submitted
+        </div>
+        {% elif travel_request.status == "Approved" and travel_request.overlimit %}
+        <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+            Draft
+        </div>
+        <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+            Submitted
+        </div>
+        <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+            Awaiting CEO approval
+        </div>
+        {% elif travel_request.status == "Approved" and not travel_request.overlimit %}
+        <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+            Draft
+        </div>
+        <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+            Submitted
+        </div>
+        <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+            Approved
+        </div>
+        {% elif travel_request.status == "Sp. Approved" %}
+        <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+            Draft
+        </div>
+        <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+            Submitted
+        </div>
+        <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+            Awaiting CEO approval
+        </div>
+        <div class="progress-bar bg-warning" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+            Sp. Approved
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="d-flex align-items-center justify-content-end">
+        <div class="p-2 flex-grow-1"></div>
+        {% if request.user == travel_request.requestor.profile.reporting_user and travel_request.status == "Submitted" %}
+        <form action="/approve_travel_request" method="post">
+            {% csrf_token %}
+            <input type="text" name="treq_id" value="{{ travel_request.id }}" hidden>
+            <button type="submit" class="btn btn-sm btn-success mr-1 mb-1">Approve</button>
+        </form>
+        <form class="reject-claim-form" action="/reject_travel_request" method="post">
+            {% csrf_token %}
+            <input type="text" name="treq_id" value="{{ travel_request.id }}" hidden>
+            <button class="btn btn-block btn-sm btn-danger ml-1 mb-1" type="submit">Reject</button>
+        </form>
+        {% endif %}
+        {% if travel_request.status == "Draft" %}
+        <form action="/submit_travel_request" method="post">
+            {% csrf_token %}
+            <input type="text" name="treq_id" value="{{ travel_request.id }}" hidden>
+            <button type="submit" class="btn btn-sm btn-success ml-2 mb-1">Submit for Approval</button>
+        </form>
+        {% endif %}
+        {% if request.user|has_group:"CEO" %}
+            {% if travel_request.status == "Approved" and travel_request.overlimit %}
+            <form action="/ol_approval_traval_request" method="post">
+                {% csrf_token %}
+                <input type="text" name="treq_id" value="{{ travel_request.id }}" hidden>
+                <button type="submit" class="btn btn-sm btn-success ml-2 mb-1">Special Approval</button>
+            </form>
+            <form class="reject-claim-form" action="/ol_reject_traval_request" method="post">
+                {% csrf_token %}
+                <input type="text" name="treq_id" value="{{ travel_request.id }}" hidden>
+                <button type="submit" class="btn btn-sm btn-danger ml-2 mb-1">Reject</button>
+            </form>
+            {% endif %}
+        {% endif %}
+    </div>
+    <table id="newtravelrequest" class="table table-sm table-bordered table-striped table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th>Travel Request</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                Record: {{ travel_request.name }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Requestor: {{ travel_request.requestor.profile }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Flight Limit: MYR {{ travel_request.total_flight_limit }} &
+                USD {{ travel_request.total_flight_limit_usd }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Accomodation Limit: MYR {{ travel_request.total_accomodation_limit }} &
+                USD {{ travel_request.total_accomodation_limit_usd }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Estimated Flight Expense: MYR {{ travel_request.total_flight_expense }} &
+                USD {{ travel_request.total_flight_expense_usd }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Estimated Accomodation Expense: MYR {{ travel_request.total_accomodation_expense }} &
+                USD {{ travel_request.total_accomodation_expense_usd }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Overlimit:
+                {% if travel_request.overlimit %}
+                <input type="checkbox" name="tr_ol" checked disabled>
+                {% else %}
+                <input type="checkbox" name="tr_ol" disabled>
+                {% endif %}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table id="travel_request_line" class="table table-sm table-bordered table-striped table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th colspan="11">Travel Request Lines</th>
+        </tr>
+        </thead>
+        <thead>
+        <tr>
+            <th>No.</th>
+            <th>Departure</th>
+            <th>Destination</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Flight Limit</th>
+            <th>Accomodation Limit</th>
+            <th>Est. Flight Expense</th>
+            <th>Est. Accomodation Expense</th>
+            <th>Over Limit?</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for record in travel_req_line %}
+        <tr>
+            <td class="counterCell">
+                <input type="text" value="{{ record.id }}" hidden>
+            </td>
+            <td>{{ record.departure }}</td>
+            <td>{{ record.destination }}</td>
+            <td>{{ record.travel_start_date }}</td>
+            <td>{{ record.travel_end_date }}</td>
+            <td>{{ record.flight_currency.symbol }} {{ record.flight_limit }}</td>
+            <td>{{ record.accomodation_currency.symbol }} {{ record.accomodation_limit }}</td>
+            <td>{{ record.flight_currency.symbol }} {{ record.estimated_flight_expense }}</td>
+            <td>{{ record.accomodation_currency.symbol }} {{ record.estimated_accomodation_expense }}</td>
+            <td>
+                {% if record.overlimit %}
+                <input class="custom_checkbox" type="checkbox" checked disabled>
+                {% else %}
+                <input type="checkbox" disabled>
+                {% endif %}
+            </td>
+            <td>
+            {% if travel_request.status == "Draft" %}
+                <div class="d-flex align-items-left">
+                    <form id="delete_tr_line" action="/delete_tr_line" method="post">
+                        {% csrf_token %}
+                        <input type="text" value="{{ record.id }}" name="travel_request_line" readonly hidden>
+                        <button type="submit" class="btn btn-sm btn-danger btn-del ml-2"
+                            onclick="return confirm('Are you sure you want to delete this line?')">
+                            Delete
+                        </button>
+                    </form>
+                    <form id="edit_tr_line" action="/edit_tr_line" method="post">
+                        {% csrf_token %}
+                        <input type="text" value="{{ record.id }}" name="travel_request_line" readonly hidden>
+                        <button type="submit" class="btn btn-sm btn-warning ml-2">
+                            Edit
+                        </button>
+                    </form>
+                </div>
+            {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% if travel_request.status == "Draft" %}
+    <form action="/new_travel_request" method="post">
+        {% csrf_token %}
+        <input type="text" value="{{ travel_request.id }}" name="travel_request" readonly hidden>
+        <input type="text" value="{{ travel_request.status }}" name="status" readonly hidden>
+        <table id="travelrequestline" class="table table-sm table-bordered table-striped table-hover">
+            <thead class="thead-dark">
+            <tr>
+                <th colspan="2">New Travel Request Line</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Departure:</td>
+                <td>{{ travel_request_form.departure }}</td>
+            </tr>
+            <tr>
+                <td>Destination:</td>
+                <td>{{ travel_request_form.destination }}</td>
+            </tr>
+            <tr>
+                <td>Traveling Start Date:</td>
+                <td id="start_date">
+                    <input type="date" id="start-date" name="start_date" value="{{ prev_data.start_date }}">
+                </td>
+            </tr>
+            <tr>
+                <td>Traveling End Date:</td>
+                <td id="end_date">
+                    <input type="date" id="end-date" name="end_date" value="{{ prev_data.end_date }}">
+                </td>
+            </tr>
+            <tr>
+                <td>Flight Ticket Estimation: <i>(cost of single trip)</i></td>
+                <td>
+                    <input type="number" step=".01" name="est_flight" class="item_table" value="{{ prev_data.est_flight }}" required>
+                </td>
+            </tr>
+            <tr>
+                <td>Accomodation Estimation:</td>
+                <td>
+                    <input type="number" step=".01" name="est_accomodation" class="item_table" value="{{ prev_data.est_accomodation }}" required>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-info btn-block" id="submit_travel_request_line" type="submit">Add</button>
+    </form>
+    {% endif %}
+</div>
+{% endblock %}

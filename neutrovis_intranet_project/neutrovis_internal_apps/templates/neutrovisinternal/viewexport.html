@@ -1,0 +1,55 @@
+{% extends "neutrovisinternal/layout.html" %}
+
+{% block title %}Claims for Export{% endblock %}
+
+{% block body %}
+<div class="maindiv">
+    {% if verified_claims %}
+    <form method="post" action="/export_claims">
+        {% csrf_token %}
+        <div class="d-flex align-items-center justify-content-end">
+            <h3>Claims for Export</h3>
+            <div class="p-2 flex-grow-1"></div>
+            <button class="btn btn-sm btn-success ml-2" type="submit">
+                Export
+            </button>
+        </div>
+        <table id="claim_verified" class="table table-sm table-bordered table-striped table-hover">
+            <thead class="thead-dark">
+            <tr>
+                <th>No.</th>
+                <th>Claim Record</th>
+                <th>Claim Amount</th>
+                <th>Requestor</th>
+                <th>Approved by</th>
+                <th>Submit Date</th>
+                <th>Approve Date</th>
+                <th>Status</th>
+                <th>
+                    Select All
+                    <input type="checkbox" id="select_all">
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for v_claim in verified_claims %}
+            <tr>
+                <td class="counterCell"></td>
+                <td><a href="viewsubmission/{{ v_claim.id }}">{{ v_claim.name }}</a></td>
+                <td>MYR {{ v_claim.total_amount }}</td>
+                <td>{{ v_claim.requestor }}</td>
+                <td>{{ v_claim.requestor.profile.reporting_user }}</td>
+                <td>{{ v_claim.submit_date }}</td>
+                <td>{{ v_claim.approval_date }}</td>
+                <td>{{ v_claim.status }}</td>
+                <td><input type="checkbox" name="export_claims[]" value="{{ v_claim.id }}"></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </form>
+    {% else %}
+    <h4>No claims done verification</h4>
+    {% endif %}
+</div>
+{% endblock %}

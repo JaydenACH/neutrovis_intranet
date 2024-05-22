@@ -1,0 +1,212 @@
+{% extends "neutrovisinternal/layout.html" %}
+
+{% block title %} Profile {% endblock %}
+
+{% block body %}
+<div class="maindiv">
+    {% if results %}
+        <div class="d-flex align-items-center justify-content-end">
+            <h3>Profile</h3>
+            <div class="p-2 flex-grow-1"></div>
+            <button type="button" data-bs-toggle="modal" data-bs-target="#createProfileModal" class="btn btn-sm btn-success ml-2">New</button>
+                <div class="modal fade" id="createProfileModal" tabindex="-1" aria-labelledby="createProfileModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form action="{% url 'setting_profile' %}" method="POST">
+                                {% csrf_token %}
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="createProfileModalLabel">New</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div>
+                                        <label>Username</label>
+                                        <input type="text" class="form-control" id="username" name="username" required>
+                                    </div>
+                                    <div>
+                                        <label>First Name</label>
+                                        <input type="text" class="form-control" id="first_name" name="first_name">
+                                    </div>
+                                    <div>
+                                        <label>Last Name</label>
+                                        <input type="text" class="form-control" id="last_name" name="last_name">
+                                    </div>
+                                    <div>
+                                        <label>Email</label>
+                                        <input type="email" class="form-control" id="email" name="email">
+                                    </div>
+                                    <div>
+                                        <label>Employee ID</label>
+                                        <input type="number" class="form-control" id="employee_id" name="employee_id">
+                                    </div>
+                                    <div>
+                                        <label>Reporting User</label>
+                                        <select name="reporting_user" class="form-control">
+                                            {% for user in users %}
+                                            <option value="{{ user.id }}" {% if result.reporting_user.id == user.id %}selected{% endif %}>{{ user.profile }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label>Currency</label>
+                                        <select name="default_currency" class="form-control">
+                                            {% for currency in currencies %}
+                                            <option value="{{ currency.id }}" {% if result.default_currency.id == currency.id %}selected{% endif %}>{{ currency.symbol }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label>Department:</label>
+                                        <select name="department" class="form-control">
+                                            <option value=""></option>
+                                            {% for department in departments %}
+                                            <option value="{{ department.id }}" {% if result.department.id == department.id %}selected{% endif %}>{{ department.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label>Active</label>
+                                        <br>
+                                        <input type="checkbox" id="is_active" name="is_active" checked>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <table id="display_profiles" class="table table-sm table-bordered table-striped table-hover">
+            <thead class="thead-dark">
+            <tr>
+                <th>No.</th>
+                <th>Username</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>ID</th>
+                <th>Reporting</th>
+                <th>Currency</th>
+                <th>Department</th>
+                <th>Active</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for result in results %}
+            <tr>
+                <td class="counterCell"></td>
+                <td>{{ result.user.username }}</td>
+                <td>{{ result.user.first_name }}</td>
+                <td>{{ result.user.last_name }}</td>
+                <td>{{ result.user.email }}</td>
+                <td>{{ result.employee_id }}</td>
+                <td>
+                    {% if result.reporting_user %}
+                    {{ result.reporting_user.profile}}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if result.default_currency %}
+                    {{ result.default_currency.symbol }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if result.department %}
+                    {{ result.department }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if result.user.is_active %}
+                    Active
+                    {% else %}
+                    Inactive
+                    {% endif %}
+                </td>
+                <td>
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#editProfileModal-{{ result.id }}" class="btn btn-sm btn-primary">Edit</button>
+                        <div class="modal fade" id="editProfileModal-{{ result.id }}" tabindex="-1" aria-labelledby="editProfileModalLabel-{{ result.id }}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form action="{% url 'setting_profile' %}" method="POST">
+                                        {% csrf_token %}
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editProfileModalLabel-{{ result.id }}">Edit Profile: {{ result.user.username }}</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <input type="text" name="profile_id" value="{{ result.id }}" hidden>
+                                            <div>
+                                                <label>Username</label>
+                                                <input type="text" class="form-control" id="username-{{ result.id }}" name="username" value="{{ result.user.username }}" readonly>
+                                            </div>
+                                            <div>
+                                                <label>First Name</label>
+                                                <input type="text" class="form-control" id="first_name-{{ result.id }}" name="first_name" value="{{ result.user.first_name }}">
+                                            </div>
+                                            <div>
+                                                <label>Last Name</label>
+                                                <input type="text" class="form-control" id="last_name-{{ result.id }}" name="last_name" value="{{ result.user.last_name }}">
+                                            </div>
+                                            <div>
+                                                <label>Email</label>
+                                                <input type="email" class="form-control" id="email-{{ result.id }}" name="email" value="{{ result.user.email }}">
+                                            </div>
+                                            <div>
+                                                <label>Employee ID</label>
+                                                <input type="number" class="form-control" id="employee_id-{{ result.id }}" name="employee_id" value="{{ result.employee_id }}">
+                                            </div>
+                                            <div>
+                                                <label>Reporting User</label>
+                                                <select name="reporting_user" class="form-control">
+                                                    <option value="">---</option>
+                                                    {% for user in users %}
+                                                    <option value="{{ user.id }}" {% if result.reporting_user.id == user.id %}selected{% endif %}>{{ user.profile }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label>Currency</label>
+                                                <select name="default_currency" class="form-control">
+                                                    <option value="">---</option>
+                                                    {% for currency in currencies %}
+                                                    <option value="{{ currency.id }}" {% if result.default_currency.id == currency.id %}selected{% endif %}>{{ currency.symbol }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label>Department:</label>
+                                                <select name="department" class="form-control">
+                                                    <option value="">---</option>
+                                                    {% for department in departments %}
+                                                    <option value="{{ department.id }}" {% if result.department.id == department.id %}selected{% endif %}>{{ department.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label>Active</label>
+                                                <br>
+                                                <input type="checkbox" id="is_active-{{ result.id }}" name="is_active" {% if result.user.is_active %}checked{% endif %}>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+    <h4>No user created</h4>
+    {% endif %}
+</div>
+{% endblock %}

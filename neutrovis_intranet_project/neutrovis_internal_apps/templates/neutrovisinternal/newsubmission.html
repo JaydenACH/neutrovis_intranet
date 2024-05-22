@@ -1,0 +1,116 @@
+{% extends "neutrovisinternal/layout.html" %}
+
+{% block title %}New submission{% endblock %}
+
+{% block body %}
+<div class="maindiv">
+    <form action="/newsubmission" method="post">
+        {% csrf_token %}
+        <table id="newclaimform" class="table table-sm table-bordered table-striped table-hover">
+            <thead class="thead-dark">
+            <tr>
+                <th colspan="2">New Staff Claim</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                {% if claim_form.name %}
+                <td>Record: {{ claim_form.name }}</td>
+                {% else %}
+                <td>Record: (Generated upon submission) </td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Requestor: {{ claim_form.requestor.value }}{{ claim_form.requestor }}</td>
+            </tr>
+            <tr>
+                <td>Status: {{ claim_form.status.value }}{{ claim_form.status }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <table id="newclaimline" class="table table-sm table-bordered stripped">
+            <thead class="thead-dark">
+            <tr>
+                <th colspan="2">Claim lines</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th>Invoice ID</th>
+                <td id="invoice_id">
+                    <input class="item-table" type="text" maxlength="100" name="invoice_id"
+                           value="{{ prev_data.invoice_id }}">
+                </td>
+            </tr>
+            <tr>
+                <th>Invoice Date</th>
+                <td id="invoice_date">
+                    <input type="date" id="invoice-date" name="invoice_date" value="{{ prev_data.invoice_date }}">
+                </td>
+            </tr>
+            <tr>
+                <th>Expense Description</th>
+                <td id="invoice_description">
+                    <input class="item-table" type="text" maxlength="100"
+                           name="invoice_description" value="{{ prev_data.invoice_description }}" required>
+                </td>
+            </tr>
+            <tr>
+                <th>Expense Type</th>
+                <td id="expense_type">{{ claim_form.expense_type }}</td>
+            </tr>
+            <tr>
+                <th>Analytic Code</th>
+                <td id="analytic_code">{{ claim_form.analytic_code }}</td>
+            </tr>
+            <tr>
+                <th>Currency</th>
+                <td id="currency">{{ claim_form.currency }}</td>
+            </tr>
+            <tr>
+                <th>Amount in Currency</th>
+                <td id="amount"><input class="item-table" type="number" step=".01" name="amount"
+                                       value="{{ prev_data.amount }}" required></td>
+            </tr>
+            <tr>
+                <th>Use Custom Exchange Rate?</th>
+                <td>{{ claim_form.use_own_rate }}</td>
+            </tr>
+            <tr id="custom_exchange_rate">
+                <th>Custom Exchange Rate</th>
+                <td>{{ claim_form.own_rate }}</td>
+            </tr>
+            <tr>
+                <th>Travel Request</th>
+                <td>
+                    {{ claim_form.travel_request }}
+                </td>
+            </tr>
+            <tr>
+                <th>Attachment</th>
+                <td id="attachment">
+                    <button type="button" class="btn btn-primary js-upload-photos" id="button-upload">
+                        <span class="glyphicon glyphicon-cloud-upload"></span> Upload files
+                    </button>
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden"></span>
+                    </div>
+                    <input id="fileupload" type="file" name="file"
+                           style="display: none;"
+                           data-url="{% url 'upload_attachment' %}"
+                           data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+                </td>
+            </tr>
+            <tr>
+                <th>Remarks</th>
+                <td>
+                      <textarea class="form-control form-control-sm" id="claim_form_remarks" wrap="hard"
+                                name="claim_form_remarks" rows="5">{{prev_data.remarks}}</textarea>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-info btn-block" id="submit_claim_line" type="submit">Add</button>
+    </form>
+</div>
+{% endblock %}

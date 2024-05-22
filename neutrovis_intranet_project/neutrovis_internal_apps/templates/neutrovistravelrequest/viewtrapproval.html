@@ -1,0 +1,126 @@
+{% extends "neutrovisinternal/layout.html" %}
+{% load group_tags %}
+{% block title %}View Travel Request for Approval{% endblock %}
+{% block body %}
+<div class="maindiv">
+    {% if travel_request %}
+    <h3>Travel Request for Approval</h3>
+    <table id="approvetravelrequest" class="table table-sm table-bordered table-striped table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th rowspan="2">No.</th>
+            <th rowspan="2">Travel Request</th>
+            <th rowspan="2">Requestor</th>
+            <th rowspan="2">Last Modified</th>
+            <th rowspan="2">Approval</th>
+            <th colspan="2">Flight (Local)</th>
+            <th colspan="2">Accomodation (Local)</th>
+            <th colspan="2">Flight (Oversea)</th>
+            <th colspan="2">Accomodation (Oversea)</th>
+            <th rowspan="2">Over Limit?</th>
+            <th rowspan="2">Status</th>
+        </tr>
+        <tr>
+            <th>Expenses</th>
+            <th>Limit</th>
+            <th>Expenses</th>
+            <th>Limit</th>
+            <th>Expenses</th>
+            <th>Limit</th>
+            <th>Expenses</th>
+            <th>Limit</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for treq in travel_request %}
+        <tr>
+            <td class="counterCell"></td>
+            <td><a href="view_travel_request/{{ treq.id }}">{{ treq.name }}</a></td>
+            <td>{{ treq.requestor }}</td>
+            <td>{{ treq.write_date| date:"Y F d" }}</td>
+            <td>{{ treq.approval }}</td>
+            <td>MYR {{ treq.total_flight_expense }}</td>
+            <td>MYR {{ treq.total_flight_limit }}</td>
+            <td>MYR {{ treq.total_accomodation_expense }}</td>
+            <td>MYR {{ treq.total_accomodation_limit }}</td>
+            <td>USD {{ treq.total_flight_expense_usd }}</td>
+            <td>USD {{ treq.total_flight_limit_usd }}</td>
+            <td>USD {{ treq.total_accomodation_expense_usd }}</td>
+            <td>USD {{ treq.total_accomodation_limit_usd }}</td>
+            <td>
+                {% if treq.overlimit %}
+                <input type="checkbox" checked disabled>
+                {% else %}
+                <input type="checkbox" disabled>
+                {% endif %}
+            </td>
+            <td>{{ treq.status }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <h3>No request to be approved</h3>
+    {% endif %}
+    <hr>
+    {% if ol_travel_request and request.user|has_group:"CEO" %}
+    <h3>Travel Request for Special Approval</h3>
+    <table id="approveoltravelrequest" class="table table-sm table-bordered table-striped table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th rowspan="2">No.</th>
+            <th rowspan="2">Travel Request</th>
+            <th rowspan="2">Requestor</th>
+            <th rowspan="2">Last Modified</th>
+            <th rowspan="2">Approval</th>
+            <th colspan="2">Flight (Local)</th>
+            <th colspan="2">Accomodation (Local)</th>
+            <th colspan="2">Flight (Oversea)</th>
+            <th colspan="2">Accomodation (Oversea)</th>
+            <th rowspan="2">Over Limit?</th>
+            <th rowspan="2">Status</th>
+        </tr>
+        <tr>
+            <th>Expenses</th>
+            <th>Limit</th>
+            <th>Expenses</th>
+            <th>Limit</th>
+            <th>Expenses</th>
+            <th>Limit</th>
+            <th>Expenses</th>
+            <th>Limit</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for treq in ol_travel_request %}
+        <tr>
+            <td class="counterCell"></td>
+            <td><a href="view_travel_request/{{ treq.id }}">{{ treq.name }}</a></td>
+            <td>{{ treq.requestor }}</td>
+            <td>{{ treq.write_date| date:"Y F d" }}</td>
+            <td>{{ treq.approval }}</td>
+            <td>MYR {{ treq.total_flight_expense }}</td>
+            <td>MYR {{ treq.total_flight_limit }}</td>
+            <td>MYR {{ treq.total_accomodation_expense }}</td>
+            <td>MYR {{ treq.total_accomodation_limit }}</td>
+            <td>USD {{ treq.total_flight_expense_usd }}</td>
+            <td>USD {{ treq.total_flight_limit_usd }}</td>
+            <td>USD {{ treq.total_accomodation_expense_usd }}</td>
+            <td>USD {{ treq.total_accomodation_limit_usd }}</td>
+            <td>
+                {% if treq.overlimit %}
+                <input type="checkbox" checked disabled>
+                {% else %}
+                <input type="checkbox" disabled>
+                {% endif %}
+            </td>
+            <td>{{ treq.status }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <h3>No request needs special approval</h3>
+    {% endif %}
+</div>
+{% endblock %}

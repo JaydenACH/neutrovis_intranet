@@ -1,0 +1,42 @@
+{% extends "neutrovisinternal/login_layout.html" %}
+{% load static %}
+
+{% block body %}
+<section class="vh-80 mt-5">
+    <div class="container-fluid h-custom">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-md-9 col-lg-6 col-xl-5">
+                <img src="{% static 'neutrovisinternal/login_brand.jpeg' %}"
+                     class="img-fluid" alt="Sample image">
+            </div>
+            <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                <div class="text-center text-lg-start mb-4 pt-2">
+                    <h2 class="display-4">Neutrovis Intranet</h2>
+                </div>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-floating mb-3">
+                        <input type="text" id="username" name="username" class="form-control form-control-lg"
+                               placeholder="Enter your username"/>
+                        <label class="form-label" for="username">Username</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="password" id="login_password" name="password" class="form-control form-control-lg"
+                               placeholder="Enter password"/>
+                        <label class="form-label" for="login_password">Password</label>
+                    </div>
+                    <div class="text-center text-lg-start mt-4 pt-2">
+                        <a href="{% url 'password_reset_request' %}" class="text-body">Forgot password?</a>
+                    </div>
+                    <div class="text-center text-lg-start mt-4 pt-2">
+                        <button type="submit" class="btn btn-primary btn-block btn-lg"
+                                style="padding-left: 2.5rem; padding-right: 2.5rem;">Login
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

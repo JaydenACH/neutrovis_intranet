@@ -1,0 +1,127 @@
+{% load static %}
+{% load group_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, width=device-width">
+    <title>{% block title %}{% endblock %}</title>
+    <link href='https://fonts.googleapis.com/css?family=Akatab' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/bootstrap-table@1.21.0/dist/bootstrap-table.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+    <link href="{% static 'neutrovisinternal/styles.css' %}" rel="stylesheet">
+
+    <script type="text/javascript" charset="utf8" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf8" src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://unpkg.com/bootstrap-table@1.21.0/dist/bootstrap-table.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://unpkg.com/bootstrap-table@1.21.0/dist/bootstrap-table-locale-all.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://unpkg.com/bootstrap-table@1.21.0/dist/extensions/export/bootstrap-table-export.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/2.0.3/js/dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="{% static 'neutrovisinternal/script.js' %}"></script>
+    <script type="text/javascript" charset="utf8" src="{% static 'neutrovisinternal/upload_file.js' %}"></script>
+    <script type="text/javascript" charset="utf8" src="{% static 'js/vendor/jquery.ui.widget.js' %}"></script>
+    <script type="text/javascript" charset="utf8" src="{% static 'js/jquery.iframe-transport.js' %}"></script>
+    <script type="text/javascript" charset="utf8" src="{% static 'js/jquery.fileupload.js' %}"></script>
+</head>
+<body class="main_body d-flex flex-column min-vh-100">
+<div id="browser-message">
+    <p>Please use Google Chrome for the best experience on this website.</p>
+</div>
+<nav class="navbar bg-dark border-bottom" data-bs-theme="dark">
+    <div class="container-fluid">
+        <ul class="nav nav-pills nav-underline">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Homepage</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="" id="navbarDropdown1" role="button" data-bs-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    Staff Claim </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/mysubmission">My Claim</a>
+                    <a class="dropdown-item" href="/viewapproval">Approve Claim</a>
+                    {% if request.user|has_group:"Finance" %}
+                    <a class="dropdown-item" href="/viewverify">Verify Claim</a>
+                    <a class="dropdown-item" href="/viewexport">Export Claim</a>
+                    {% endif %}
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="" id="navbarDropdown2" role="button" data-bs-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    Travel Request </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/my_travel_request">My Request</a>
+                    <a class="dropdown-item" href="/view_tr_approval">Approve Travel Request</a>
+                </div>
+            </li>
+            {% if request.user|has_group:"Admin" %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="" id="navbarDropdown3" role="button" data-bs-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    Settings </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/setting_currency">Currency Update</a>
+                    <a class="dropdown-item" href="/setting_analyticcode">Analytic Code Update</a>
+                    <a class="dropdown-item" href="/setting_expensetype">Expense Type Update</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/setting_profile">User Update</a>
+                    <a class="dropdown-item" href="/setting_department">Department Update</a>
+                </div>
+            </li>
+            {% endif %}
+        </ul>
+        <div class="p-2 flex-grow-1"></div>
+        <span class="navbar-text" style="display: flex; flex-direction: column;">
+            <div style="margin-right: 10px;">
+                LogIn as {{ request.user.profile }}
+            </div>
+            <div style="margin-right: 10px;">
+                <a href="{% url 'password_change' %}">Reset Password</a>
+            </div>
+        </span>
+        <span class="navbar-text" style="display: flex; align-items: center;">
+            {% if user.is_authenticated %}
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-sm btn-warning">Logout</button>
+            </form>
+            {% endif %}
+        </span>
+    </div>
+</nav>
+{% if messages %}
+<div class="spaceformessage">
+    {% for message in messages %}
+    {% if message.tags == "error" %}
+    <div class="alert alert-danger" role="alert">{{ message }}</div>
+    {% endif %}
+    {% if message.tags == "success" %}
+    <div class="alert alert-success" role="alert">{{ message }}</div>
+    {% endif %}
+    {% endfor %}
+</div>
+{% endif %}
+{% block body %}
+{% endblock %}
+</body>
+<footer class="mt-auto bg-body-tertiary text-center text-lg-start">
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+        © 2024 Copyright:
+        <a class="text-body" href="https://www.neutrovis.com/">Neutrovis Sdn Bhd</a>
+        <br>
+        <small>
+            This website is created & maintained by IT Department of Neutrovis Sdn Bhd.
+            If there is any feedback, please email to <a href="mailto:it.support@neutrovis.com">it.support@neutrovis.com</a>.
+        </small>
+    </div>
+</footer>
+</html>

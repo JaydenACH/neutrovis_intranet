@@ -1,0 +1,45 @@
+{% extends "neutrovisinternal/layout.html" %}
+
+{% block title %}Expense Type{% endblock %}
+
+{% block body %}
+<div class="maindiv">
+    <h3>Expense Type</h3>
+
+    <table id="display_expensetype" class="table table-sm table-bordered table-stripped table-hover w-auto">
+        <thead class="thead-dark">
+        <tr>
+            <th>No.</th>
+            <th>Expense Type</th>
+            <th>Description</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for result in results %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{result.e_type}}</td>
+            <td>{{result.name}}</td>
+            <td>
+                <form action="/delete_expensetype" method="post">
+                    {% csrf_token %}
+                    <input type="text" name="expense_type" value="{{ result.id }}" hidden>
+                    <button class="btn btn-block btn-sm btn-danger" type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <form action="/setting_expensetype" method="POST">
+                {% csrf_token %}
+                <td>New</td>
+                <td>{{ expense_type_form.expense_type }}</td>
+                <td>{{ expense_type_form.name }}</td>
+                <td><input type="submit" value="Submit" class="btn btn-outline-primary"/></td>
+            </form>
+        </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

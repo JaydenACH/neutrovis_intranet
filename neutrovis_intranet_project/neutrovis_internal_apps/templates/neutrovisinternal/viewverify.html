@@ -1,0 +1,41 @@
+{% extends "neutrovisinternal/layout.html" %}
+
+{% block title %}Claims for Verification{% endblock %}
+
+{% block body %}
+<div class="maindiv">
+    <h3>Claims for verification</h3>
+    {% if claims %}
+    <table id="claim_record" class="table table-sm table-bordered table-striped table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th>No.</th>
+            <th>Claim Record</th>
+            <th>Claim Amount</th>
+            <th>Requestor</th>
+            <th>Approved by</th>
+            <th>Submit Date</th>
+            <th>Approve Date</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for claim in claims %}
+        <tr>
+            <td class="counterCell"></td>
+            <td><a href="viewsubmission/{{ claim.id }}">{{ claim.name }}</a></td>
+            <td>MYR {{ claim.total_amount }}</td>
+            <td>{{ claim.requestor }}</td>
+            <td>{{ claim.requestor.profile.reporting_user }}</td>
+            <td>{{ claim.submit_date }}</td>
+            <td>{{ claim.approval_date }}</td>
+            <td>{{ claim.status }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <h4><i>No claims for verification</i></h4>
+    {% endif %}
+</div>
+{% endblock %}

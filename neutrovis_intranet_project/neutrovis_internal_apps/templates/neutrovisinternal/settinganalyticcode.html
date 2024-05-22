@@ -1,0 +1,44 @@
+{% extends "neutrovisinternal/layout.html" %}
+
+{% block title %}Analytic Code{% endblock %}
+
+{% block body %}
+<div class="maindiv">
+    <h3>Analytic Code</h3>
+    <table id="display_analyticcode" class="table table-sm table-bordered table-stripped w-auto">
+        <thead class="thead-dark">
+        <tr>
+            <th>No.</th>
+            <th>Analytic Code</th>
+            <th>Description</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for result in results %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{result.code}}</td>
+            <td>{{result.name}}</td>
+            <td>
+                <form action="/delete_analyticcode" method="post">
+                    {% csrf_token %}
+                    <input type="text" name="analytic_code" value="{{ result.id }}" hidden>
+                    <button class="btn btn-block btn-sm btn-danger" type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <form action="/setting_analyticcode" method="POST">
+                {% csrf_token %}
+                <td>New</td>
+                <td>{{ analytic_code_form.code }}</td>
+                <td>{{ analytic_code_form.name }}</td>
+                <td><input type="submit" value="Submit" class="btn btn-outline-primary"/></td>
+            </form>
+        </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}
