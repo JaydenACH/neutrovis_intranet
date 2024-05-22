@@ -1,0 +1,219 @@
+[
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 1,
+    "fields": {
+      "name": "CEO OFFICE"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 2,
+    "fields": {
+      "name": "PROCUREMENT"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 3,
+    "fields": {
+      "name": "SALES - PHARMA"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 4,
+    "fields": {
+      "name": "E-COMMERCE"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 5,
+    "fields": {
+      "name": "OPERATIONS"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 6,
+    "fields": {
+      "name": "FINANCE"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 7,
+    "fields": {
+      "name": "CREATIVE"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 8,
+    "fields": {
+      "name": "SALES - HEALTH & BEAUTY"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 9,
+    "fields": {
+      "name": "PRODUCT"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 10,
+    "fields": {
+      "name": "MERCHANDISER"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 11,
+    "fields": {
+      "name": "DESIGN & INNOVATION"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 12,
+    "fields": {
+      "name": "EVENTS & SALES"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 13,
+    "fields": {
+      "name": "R&D - HEALTH & TECH"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 14,
+    "fields": {
+      "name": "R&D - HOME & PERSONAL CARE"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 15,
+    "fields": {
+      "name": "REGULATORY AFFAIRS"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 16,
+    "fields": {
+      "name": "NPD"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 17,
+    "fields": {
+      "name": "SALES - DIRECT"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 18,
+    "fields": {
+      "name": "TRADE MARKETING"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 19,
+    "fields": {
+      "name": "SALES - GT"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 20,
+    "fields": {
+      "name": "BU, HOMECARE"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 21,
+    "fields": {
+      "name": "DIGITAL MARKETING"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 22,
+    "fields": {
+      "name": "BU, PAPER"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 23,
+    "fields": {
+      "name": "IT"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 24,
+    "fields": {
+      "name": "SALES - MT"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 25,
+    "fields": {
+      "name": "PEOPLE & WORKPLACE"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 26,
+    "fields": {
+      "name": "BU, HEALTH SUPPLEMENT"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 27,
+    "fields": {
+      "name": "LEGAL"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 28,
+    "fields": {
+      "name": "BU, PEST CARE"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 29,
+    "fields": {
+      "name": "BU, PERSONAL CARE"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 30,
+    "fields": {
+      "name": "BU, ORAL CARE"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.department",
+    "pk": 31,
+    "fields": {
+      "name": "SALES"
+    }
+  }
+]

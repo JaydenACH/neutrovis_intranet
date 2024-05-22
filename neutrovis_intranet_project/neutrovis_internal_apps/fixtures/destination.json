@@ -1,0 +1,130 @@
+[
+  {
+    "model": "neutrovis_internal_apps.destination",
+    "pk": 1,
+    "fields": {
+      "destination": "Klang Valley",
+      "grouping": "Local"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.destination",
+    "pk": 2,
+    "fields": {
+      "destination": "Penang",
+      "grouping": "Local"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.destination",
+    "pk": 3,
+    "fields": {
+      "destination": "Other States (Peninsular Malaysia)",
+      "grouping": "Local"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.destination",
+    "pk": 4,
+    "fields": {
+      "destination": "Other States (East Malaysia)",
+      "grouping": "Local"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.destination",
+    "pk": 5,
+    "fields": {
+      "destination": "Brunei Darussalam",
+      "grouping": "ASEAN"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.destination",
+    "pk": 6,
+    "fields": {
+      "destination": "Republic of Singapore",
+      "grouping": "ASEAN"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.destination",
+    "pk": 7,
+    "fields": {
+      "destination": "Kingdom of Thailand",
+      "grouping": "ASEAN"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.destination",
+    "pk": 8,
+    "fields": {
+      "destination": "Myanmar",
+      "grouping": "ASEAN"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.destination",
+    "pk": 9,
+    "fields": {
+      "destination": "Republic of Indonesia",
+      "grouping": "ASEAN"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.destination",
+    "pk": 10,
+    "fields": {
+      "destination": "Philippines",
+      "grouping": "ASEAN"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.destination",
+    "pk": 11,
+    "fields": {
+      "destination": "Socialist Republic of Vietnam",
+      "grouping": "ASEAN"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.destination",
+    "pk": 12,
+    "fields": {
+      "destination": "Japan",
+      "grouping": "ASIA"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.destination",
+    "pk": 13,
+    "fields": {
+      "destination": "Taiwan",
+      "grouping": "ASIA"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.destination",
+    "pk": 14,
+    "fields": {
+      "destination": "People's Republic of China",
+      "grouping": "ASIA"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.destination",
+    "pk": 15,
+    "fields": {
+      "destination": "Hong Kong SAR",
+      "grouping": "ASIA"
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.destination",
+    "pk": 16,
+    "fields": {
+      "destination": "Republic of Korea",
+      "grouping": "ASIA"
+    }
+  }
+]

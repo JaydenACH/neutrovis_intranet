@@ -1,0 +1,18 @@
+[
+  {
+    "model": "neutrovis_internal_apps.systemparameter",
+    "pk": 1,
+    "fields": {
+      "key": "Query BNM API",
+      "value": ""
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.systemparameter",
+    "pk": 2,
+    "fields": {
+      "key": "BNM_API",
+      "value": "https://api.bnm.gov.my/public/exchange-rate?session=0900&quote=rm"
+    }
+  }
+]

@@ -1,0 +1,146 @@
+[
+  {
+    "model": "neutrovis_internal_apps.allowancelimit",
+    "fields": {
+      "destination": 1,
+      "flight_allowance": 175,
+      "accomodation_allowance": 250,
+      "currency": 1
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.allowancelimit",
+    "fields": {
+      "destination": 2,
+      "flight_allowance": 175,
+      "accomodation_allowance": 250,
+      "currency": 1
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.allowancelimit",
+    "fields": {
+      "destination": 3,
+      "flight_allowance": 175,
+      "accomodation_allowance": 200,
+      "currency": 1
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.allowancelimit",
+    "fields": {
+      "destination": 4,
+      "flight_allowance": 275,
+      "accomodation_allowance": 200,
+      "currency": 1
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.allowancelimit",
+    "fields": {
+      "destination": 5,
+      "flight_allowance": 200,
+      "accomodation_allowance": 100,
+      "currency": 1
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.allowancelimit",
+    "fields": {
+      "destination": 6,
+      "flight_allowance": 130,
+      "accomodation_allowance": 150,
+      "currency": 1
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.allowancelimit",
+    "fields": {
+      "destination": 7,
+      "flight_allowance": 130,
+      "accomodation_allowance": 80,
+      "currency": 1
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.allowancelimit",
+    "fields": {
+      "destination": 8,
+      "flight_allowance": 200,
+      "accomodation_allowance": 80,
+      "currency": 1
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.allowancelimit",
+    "fields": {
+      "destination": 9,
+      "flight_allowance": 200,
+      "accomodation_allowance": 80,
+      "currency": 1
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.allowancelimit",
+    "fields": {
+      "destination": 10,
+      "flight_allowance": 200,
+      "accomodation_allowance": 80,
+      "currency": 1
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.allowancelimit",
+    "fields": {
+      "destination": 11,
+      "flight_allowance": 130,
+      "accomodation_allowance": 80,
+      "currency": 1
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.allowancelimit",
+    "fields": {
+      "destination": 12,
+      "flight_allowance": 550,
+      "accomodation_allowance": 150,
+      "currency": 1
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.allowancelimit",
+    "fields": {
+      "destination": 13,
+      "flight_allowance": 330,
+      "accomodation_allowance": 100,
+      "currency": 1
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.allowancelimit",
+    "fields": {
+      "destination": 14,
+      "flight_allowance": 10000,
+      "accomodation_allowance": 100,
+      "currency": 1
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.allowancelimit",
+    "fields": {
+      "destination": 15,
+      "flight_allowance": 330,
+      "accomodation_allowance": 100,
+      "currency": 1
+    }
+  },
+  {
+    "model": "neutrovis_internal_apps.allowancelimit",
+    "fields": {
+      "destination": 16,
+      "flight_allowance": 550,
+      "accomodation_allowance": 150,
+      "currency": 1
+    }
+  }
+]
